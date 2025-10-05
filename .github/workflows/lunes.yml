@@ -1,0 +1,27 @@
+name: Lunes Open  
+
+on:
+  schedule:
+    # 每天 UTC 时间 00:00 运行（可根据需求调整小时数，如改为 8 即 UTC 08:00）
+    - cron: '0 0 * * *'
+  workflow_dispatch:  # 保留手动触发功能，方便临时执行
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # 保留原 Node.js 版本，确保兼容性
+
+      - name: Install dependencies
+        run: npm install puppeteer@latest  # 保留最新 puppeteer 安装逻辑
+
+      - name: Run login script
+        env:
+          USERNAME_AND_PASSWORD: ${{ secrets.USERNAME_AND_PASSWORD }}  # 保留密钥传递
+        run: node scripts/lunes.js  # 保留原脚本执行路径
